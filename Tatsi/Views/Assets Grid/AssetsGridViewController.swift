@@ -302,13 +302,13 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
     
     if videoSelected && photosSelected {
       // We know we have more than 1 item if both are true.
-      updatedTitle = "\(assetCount) items selected"
+      updatedTitle = "\(assetCount) Items Selected"
     } else if videoSelected {
       // User can only select one video.
-      updatedTitle = "\(assetCount) video selected"
+      updatedTitle = "\(assetCount) Video Selected"
     } else if photosSelected {
       // We only have photo(s)
-      updatedTitle = assetCount > 1 ? "\(assetCount) photos selected" : "\(assetCount) photo selected"
+      updatedTitle = assetCount > 1 ? "\(assetCount) Photos Selected" : "\(assetCount) Photo Selected"
     } else {
       // There are no selected assets
       updatedTitle = "Tap to Select"
