@@ -21,6 +21,11 @@ final public class TatsiPickerViewController: UINavigationController {
     return config.preferredStatusBarStyle
   }
   
+  // MARK: - Internal properties
+  
+  /// Persists the assets that a user has selected between albumns. 
+  internal var selectedAssets: [PHAsset] = []
+  
   // MARK: - Initializers
   
   public init(config: TatsiConfig = TatsiConfig.default) {
