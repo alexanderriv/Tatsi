@@ -24,7 +24,6 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
       guard album != oldValue else {
         return
       }
-      selectedAssets = []
       assets = []
       collectionView?.reloadData()
       
@@ -32,9 +31,12 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
     }
   }
   
-  internal fileprivate(set) var selectedAssets = [PHAsset]() {
-    didSet {
-      reloadDoneButtonState()
+  internal fileprivate(set) var selectedAssets: [PHAsset] {
+    get {
+      pickerViewController?.selectedAssets ?? []
+    }
+    set {
+      pickerViewController?.selectedAssets = newValue
     }
   }
   
