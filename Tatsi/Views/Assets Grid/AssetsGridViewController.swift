@@ -316,6 +316,21 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
     return updatedTitle
   }
   
+  private func showMaxVideoSelectedAlert() {
+    DispatchQueue.main.async { [weak self] in
+      let alert = UIAlertController(title: "Cannot add video", message: "You can only have 1 video per page.", preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+      self?.present(alert, animated: true, completion: nil)
+    }
+  }
+  private func showMaxItemsSelectedAlert() {
+    DispatchQueue.main.async { [weak self] in
+      let alert = UIAlertController(title: "Too many items selected", message: "You can only add 10 items total and only 1 item can be a video. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+      self?.present(alert, animated: true, completion: nil)
+    }
+  }
+  
   // MARK: - Button state
   
   fileprivate func reloadDoneButtonState() {
@@ -476,27 +491,29 @@ extension AssetsGridViewController {
 extension AssetsGridViewController {
   
   override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-    guard selectedAssets.count < config?.maxNumberOfSelections ?? Int.max else {
-      UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: LocalizableStrings.accessibilityAlertSelectionLimitReached)
+    guard let asset = asset(for: indexPath) else { return false }
+    if selectedAssets.count == config?.maxNumberOfSelections {
+      showMaxItemsSelectedAlert()
       return false
-    }
+    } else {
+      // We should check to make sure there is not more than one video.
+      let selectedAssetType = asset.mediaType
+      if selectedAssets.contains(where: { $0.mediaType == .video }) && selectedAssetType == .video {
+        showMaxVideoSelectedAlert()
+        return false
+        }
+      }
     return true
   }
   
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if let asset = asset(for: indexPath) {
       if !selectedAssets.contains(asset) {
-        guard selectedAssets.count < config?.maxNumberOfSelections ?? Int.max else {
-          UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: LocalizableStrings.accessibilityAlertSelectionLimitReached)
-          return
-        }
         selectedAssets.append(asset)
         title = updateTitleBasedOnSelectedAssets()
-        if let maxSelection = config?.maxNumberOfSelections, maxSelection == 1, config?.finishImmediatelyWithMaximumOfOne != false {
-          finishPicking(with: selectedAssets)
-        }
       }
     } else {
+      // This should be removed or fixed.
       let cameraController = UIImagePickerController()
       cameraController.sourceType = UIImagePickerController.SourceType.camera
       cameraController.delegate = self
