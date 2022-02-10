@@ -42,6 +42,15 @@ final public class TatsiPickerViewController: UINavigationController {
     fatalError("init(coder:) has not been implemented")
   }
   
+  public override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    if #available(iOS 13.0, *) {
+      setAppearanceForNavigationBar()
+      view.layoutIfNeeded()
+      view.updateConstraintsIfNeeded()
+    }
+  }
+  
   // MARK: - Helpers
   
   internal func setIntialViewController() {
@@ -79,6 +88,29 @@ final public class TatsiPickerViewController: UINavigationController {
       viewControllers = [AlbumsViewController()]
     }
   }
+  
+  @available(iOS 13, *)
+  private func setAppearanceForNavigationBar() {
+    let appearance = UINavigationBarAppearance()
+    appearance.configureWithOpaqueBackground()
+    appearance.backgroundColor = config.navBarBackgroundColor
+    if let font = config.navBarTitleFontType {
+      appearance.titleTextAttributes = [
+        .foregroundColor: config.navBarTitleTextColor,
+        NSAttributedString.Key.font: font
+      ]
+    } else {
+      appearance.titleTextAttributes = [
+        .foregroundColor: config.navBarTitleTextColor
+      ]
+    }
+    // The below line is needed for iOS 14 for some odd reason.
+    navigationBar.barTintColor = config.navBarBackgroundColor
+    navigationBar.standardAppearance = appearance
+    navigationBar.scrollEdgeAppearance = appearance
+  }
+  
+  
   
   internal func customCancelButtonItem() -> UIBarButtonItem? {
     return pickerDelegate?.cancelBarButtonItem(for: self)
