@@ -81,6 +81,15 @@ public struct TatsiConfig {
   /// The statusbar style to be used on the screens
   public var preferredStatusBarStyle: UIStatusBarStyle = .default
   
+  /// The background color for the navigation bar. Default is white.
+  public var navBarBackgroundColor: UIColor = .white
+  
+  /// The foreground color of the title text. Default is black.
+  public var navBarTitleTextColor: UIColor = .black
+  
+  /// Font style to be used for the navigation bar title.
+  public var navBarTitleFontType: UIFont?
+    
   /// Set a table name to load the localizable strings used in Tatsi from a specified localizable strings file.
   public var localizableStringsTableName: String? {
     didSet {
