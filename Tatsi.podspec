@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "Tatsi"
-  s.version      = "1.2.2"
+  s.version      = "1.3.0"
   s.summary      = "A drop-in replacement for UIImagePickerController with the ability to select multiple images and/or videos"
 
   # This description is used to generate tags and improve search results.
@@ -76,8 +76,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/awkward/Tatsi.git", :tag => "#{s.version}" }
-
+  s.source       = { :git => "https://github.com/alexanderriv/Tatsi.git", :tag => "#{s.version}" }
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
