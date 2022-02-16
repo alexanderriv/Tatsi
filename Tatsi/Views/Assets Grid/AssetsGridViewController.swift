@@ -37,6 +37,7 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
     }
     set {
       pickerViewController?.selectedAssets = newValue
+      reloadDoneButtonState()
     }
   }
   
