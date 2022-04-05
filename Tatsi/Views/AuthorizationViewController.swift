@@ -99,6 +99,16 @@ final internal class AuthorizationViewController: UIViewController, PickerViewCo
   }
   
   private func reloadContents() {
+    let isRootModalViewController = navigationController?.viewControllers.first == self && presentingViewController != nil
+    
+    let cancelButtonItem = pickerViewController?.customCancelButtonItem() ?? UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: nil)
+    cancelButtonItem.target = self
+    cancelButtonItem.action = #selector(cancel(_:))
+    cancelButtonItem.tintColor = config?.colors.link ?? TatsiConfig.default.colors.link
+    cancelButtonItem.accessibilityIdentifier = "tatsi.button.cancel"
+    
+    navigationItem.leftBarButtonItem = isRootModalViewController ? cancelButtonItem : nil
+    
     switch PHPhotoLibrary.authorizationStatus() {
     case .notDetermined:
       titleLabel.text = LocalizableStrings.authorizationViewRequestingAccessTitle
@@ -111,6 +121,10 @@ final internal class AuthorizationViewController: UIViewController, PickerViewCo
     default:
       break
     }
+  }
+  
+  @objc fileprivate func cancel(_ sender: AnyObject) {
+    cancelPicking()
   }
   
   @objc private func openSettings(_ sender: UIButton) {
