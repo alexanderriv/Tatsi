@@ -328,7 +328,12 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
   }
   private func showMaxItemsSelectedAlert() {
     DispatchQueue.main.async { [weak self] in
-      let alert = UIAlertController(title: "Too many items selected", message: "You can only add 10 items total and only 1 item can be a video. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+      var alert = UIAlertController()
+      if self?.config?.maxNumberOfSelections == 1 {
+        alert = UIAlertController(title: "Cannot select item", message: "You can only add 1 photo or video. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+      } else {
+        alert = UIAlertController(title: "Too many items selected", message: "You can only add 10 items total and only 1 item can be a video. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+      }
       alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
       self?.present(alert, animated: true, completion: nil)
     }

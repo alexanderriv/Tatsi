@@ -398,9 +398,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0C5B61661F0D231E005A25CE /* Build configuration list for PBXNativeTarget "Tatsi" */;
 			buildPhases = (
+				0C5B615A1F0D231D005A25CE /* Headers */,
 				0C5B61581F0D231D005A25CE /* Sources */,
 				0C5B61591F0D231D005A25CE /* Frameworks */,
-				0C5B615A1F0D231D005A25CE /* Headers */,
 				0C5B615B1F0D231D005A25CE /* Resources */,
 			);
 			buildRules = (
