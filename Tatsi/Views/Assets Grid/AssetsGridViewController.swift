@@ -11,6 +11,7 @@ import Photos
 
 final internal class AssetsGridViewController: UICollectionViewController, PickerViewController {
   
+  
   // MARK: - Public Properties
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -326,11 +327,31 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
       self?.present(alert, animated: true, completion: nil)
     }
   }
-  private func showMaxItemsSelectedAlert() {
+  private func showMaxItemsSelectedAlert(maxSelection: Int, supportedMediaTypes: Set<PHAssetMediaType>) {
     DispatchQueue.main.async { [weak self] in
       var alert = UIAlertController()
-      if self?.config?.maxNumberOfSelections == 1 {
-        alert = UIAlertController(title: "Cannot select item", message: "You can only add 1 photo or video. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+      if maxSelection == 1 {
+        if supportedMediaTypes.count > 1 {
+          // show generic item alert
+          alert = UIAlertController(title: "Cannot select item", message: "You can only add 1 item. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+        } else {
+          // we only have one media type so we should tailor it to the proper type
+          let mediaType = supportedMediaTypes.first
+          // 1 for image
+          switch mediaType {
+          case .image:
+            alert = UIAlertController(title: "Cannot select photo", message: "You can only add 1 photo. Please deselect a photo if you would like to add this one.", preferredStyle: .alert)
+            
+          case .video:
+            alert = UIAlertController(title: "Cannot select video", message: "You can only add 1 video. Please deselect a video if you would like to add this one.", preferredStyle: .alert)
+            
+          case .audio:
+            alert = UIAlertController(title: "Cannot select audio", message: "You can only add 1 audio file. Please deselect a audio file if you would like to add this one.", preferredStyle: .alert)
+            
+          default:
+            alert = UIAlertController(title: "Cannot select item", message: "You can only add 1 item. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
+          }
+        }
       } else {
         alert = UIAlertController(title: "Too many items selected", message: "You can only add 10 items total and only 1 item can be a video. Please deselect an item if you would like to add this one.", preferredStyle: .alert)
       }
@@ -499,9 +520,13 @@ extension AssetsGridViewController {
 extension AssetsGridViewController {
   
   override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-    guard let asset = asset(for: indexPath) else { return false }
-    if selectedAssets.count == config?.maxNumberOfSelections {
-      showMaxItemsSelectedAlert()
+    guard
+      let asset = asset(for: indexPath),
+      let maxNumberOfSelections = config?.maxNumberOfSelections,
+      let supportedMediaTypes = config?.supportedMediaTypes
+    else { return false }
+    if selectedAssets.count == maxNumberOfSelections {
+      showMaxItemsSelectedAlert(maxSelection: maxNumberOfSelections, supportedMediaTypes: supportedMediaTypes)
       return false
     } else {
       // We should check to make sure there is not more than one video.
