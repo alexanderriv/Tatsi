@@ -381,8 +381,14 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
       }
       let result = PHAsset.fetchAssets(in: strongSelf.album, options: fetchOptions)
       var allAssets = [PHAsset]()
-      result.enumerateObjects({ asset, _, _ in
-        allAssets.append(asset)
+      let options = PHContentEditingInputRequestOptions()
+      options.isNetworkAccessAllowed = true
+      result.enumerateObjects({ [weak self] asset, _, _ in
+        if let uniformTypeIdentifier = asset.value(forKey: "uniformTypeIdentifier") as? String {
+          if self?.config?.unsupportedUniformTypeIdentifiers?.contains(uniformTypeIdentifier) == false {
+            allAssets.append(asset)
+          }
+        }
       })
       DispatchQueue.main.async {
         if strongSelf.config?.invertUserLibraryOrder == true && strongSelf.album.isUserLibrary {
