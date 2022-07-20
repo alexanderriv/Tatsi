@@ -381,8 +381,6 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
       }
       let result = PHAsset.fetchAssets(in: strongSelf.album, options: fetchOptions)
       var allAssets = [PHAsset]()
-      let options = PHContentEditingInputRequestOptions()
-      options.isNetworkAccessAllowed = true
       result.enumerateObjects({ [weak self] asset, _, _ in
         if let uniformTypeIdentifier = asset.value(forKey: "uniformTypeIdentifier") as? String {
           if self?.config?.unsupportedUniformTypeIdentifiers?.contains(uniformTypeIdentifier) == false {
