@@ -383,7 +383,7 @@ final internal class AssetsGridViewController: UICollectionViewController, Picke
       var allAssets = [PHAsset]()
       result.enumerateObjects({ [weak self] asset, _, _ in
         if let uniformTypeIdentifier = asset.value(forKey: "uniformTypeIdentifier") as? String {
-          if self?.config?.unsupportedUniformTypeIdentifiers?.contains(uniformTypeIdentifier) == false {
+          if self?.config?.supportedUniformTypeIdentifiers?.contains(uniformTypeIdentifier) == true {
             allAssets.append(asset)
           }
         }
