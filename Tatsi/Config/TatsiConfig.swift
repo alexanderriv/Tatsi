@@ -42,7 +42,7 @@ public struct TatsiConfig {
   /// Can be used to filter out certain photo or video types. Such as Panoramas, slomo videos, screenshots or live photos. Defaults to no filtering
   public var supportedMediaSubTypes: [PHAssetMediaSubtype]?
   
-  public var unsupportedUniformTypeIdentifiers: [String]?
+  public var supportedUniformTypeIdentifiers: [String]?
   
   /// If the picker should show an option to open the camera in the user library (all photos/camera roll). Defaults to false.
   public var showCameraOption = false
